@@ -1,7 +1,3 @@
-"""
-Automated Topic Database - Streamlit App
-Based on proposal for Elements / Assembly / Cross topic tracking
-"""
 
 import streamlit as st
 import pandas as pd

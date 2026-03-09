@@ -4,156 +4,231 @@ An automated topic tracking and reporting tool for **Elements**, **Assembly**, a
 
 ---
 
-## Features
+Quality Topics Tracker – Streamlit Application
+A smart, automated system for tracking Quality topics across Elements, Assembly, and Cross-functional areas.
+Designed for Quality Assurance Management, IATF compliance, and Lean Six Sigma workflows.
 
-- **Dashboard** — Live KPIs, aging buckets, category breakdown, and completion progress
-- **Topic List** — Browse, filter, and edit all topics in one place
-- **New Topic Form** — Log issues with full documentation fields
-- **Export** — Generate reports as Excel (`.xlsx`) or PDF at any time
+# Overview
+The Quality Topics Tracker is a Streamlit-based web application backed by an Excel data store.
+It provides an automated, structured, and audit-ready platform to:
 
----
+Register and document Quality issues/topics
+Automatically calculate aging, risk scoring, and escalation
+Visualize category breakdowns, trends, and Pareto charts
+Upload supporting evidence (pictures, files)
+Export topics for QAMM/GQA management reporting
 
-## Requirements
+The system is fully modular and can be extended or migrated to an SQL backend without UI changes.
 
-- Python 3.10 or higher
-- The following packages (see `requirements.txt`):
+# Features
+1. Topic Database
+Each topic includes:
 
-| Package | Purpose |
-|---|---|
-| `streamlit` | Web app framework |
-| `pandas` | Data handling |
-| `openpyxl` | Excel export |
-| `reportlab` | PDF export |
+Topic group & sub-topic
+Category (Elements / Assembly / Cross)
+PIC
+Problem description
+Root cause analysis
+Corrective actions
+Customer impact flag
+Status lifecycle
+Opening date and milestone dates
+Links to 8Ds, meeting minutes, shared folders
+Attachments (photos, documents)
 
----
+The system automatically adds:
 
-## Installation & Setup
+TopicID (unique)
+DaysOpen
+Aging bucket classification
+Risk scoring
+Escalation flag
 
-**1. Clone or download the project files**
 
-Make sure you have these files in the same folder:
-```
-topic_database_app.py
-requirements.txt
-README.md
-```
+2. Dashboards & Analytics
+Home Dashboard
 
-**2. (Optional) Create a virtual environment**
-```bash
-python -m venv venv
-source venv/bin/activate        # macOS / Linux
-venv\Scripts\activate           # Windows
-```
+KPI cards: Total / Open / Closed / Blocked / Completion %
+Aging bucket bar chart
+Category Pareto chart
+High-risk & overdue agenda list
 
-**3. Install dependencies**
-```bash
-pip install -r requirements.txt
-```
+Analytics Page
 
-**4. Run the app**
-```bash
-streamlit run topic_database_app.py
-```
+Monthly opening trend
+Root cause Pareto (top 20 issues)
+Cross-category comparisons
 
-The app will open automatically in your browser at `http://localhost:8501`.
 
----
+3. Smart Topic Creation Form
+The input form includes:
 
-## Data Storage
+Preconfigured categories, severities, and statuses
+Multi-file upload
+Auto-generated dates and default values
+Easy link insertion
+Automatic naming & saving of attachments
 
-All topics are saved locally to **`topics_data.json`** in the same folder as the app. This file is created automatically on first run and persists between sessions.
 
-> ⚠️ Do not delete `topics_data.json` unless you want to reset all data. Back it up regularly.
+4. Data Storage
+Default Storage
 
-To reset to the demo data, simply delete `topics_data.json` and restart the app.
+Excel file: data/topics.xlsx
+Attachments stored under: data/attachments/
+Automatic backups: data/backups/
 
----
+Optional
+Switch to SQLite by enabling the flag in config.py.
 
-## App Sections
+5. One‑Click Export
+The Exports page provides:
 
-### 📊 Dashboard
-The main overview page. Displays:
-- **KPI cards**: Total, Open, In Progress, Blocked, Closed, and overall Completion %
-- **Progress bar**: Visual completion indicator
-- **Aging buckets**: Count of non-closed topics grouped by time since opening (0–3 months, 3–6 months, 6–12 months, >1 year)
-- **Category breakdown**: Per-category totals and status counts for Elements, Assembly, and Cross
+Excel export
+CSV export
+PPTX export (slides summarizing each topic)
 
-### 📋 All Topics
-Browse all topics as expandable cards. Each card shows the full topic record including problem description, root cause analysis, corrective actions, next steps, and customer impact.
+Useful for:
 
-Use the **sidebar filters** to narrow by Category, Status, or free-text search.
+QAMM reports
+Customer meetings
+Management updates
 
-Click **✏️ Edit** on any topic to update its fields inline.
 
-### ➕ New Topic
-Form to log a new topic. Required fields are marked with `*`. Supported fields:
+📁 Project Structure
+qa_topics_app/
+│
+├─ app.py
+├─ pages/
+│   ├─ 1_New_Topic.py
+│   ├─ 2_Topic_Explorer.py
+│   ├─ 3_Analytics.py
+│   ├─ 4_Exports.py
+│
+├─ components/
+│   ├─ kpi_cards.py
+│   ├─ charts.py
+│   ├─ forms.py
+│   └─ tables.py
+│
+├─ core/
+│   ├─ config.py
+│   ├─ schema.py
+│   ├─ logic.py
+│   └─ services.py
+│
+├─ io/
+│   ├─ repo_excel.py
+│   ├─ repo_sqlite.py
+│   ├─ migration.py
+│   └─ exporters.py
+│
+├─ utils/
+│   ├─ cache.py
+│   ├─ dates.py
+│   ├─ ids.py
+│   └─ ui.py
+│
+├─ data/
+│   ├─ topics.xlsx
+│   ├─ attachments/
+│   └─ backups/
+│
+├─ requirements.txt
+└─ README.md
 
-| Field | Description |
-|---|---|
-| Topic Group | High-level grouping (e.g. "Welding Defects") |
-| Sub-Topic | Specific issue within the group |
-| Category | Elements / Assembly / Cross |
-| Opening Date | Date the issue was first identified |
-| PIC | Person in Charge |
-| Problem Description | What was observed |
-| Root Cause Analysis | Known or suspected root causes |
-| Corrective Actions | Actions taken so far |
-| Status | Open / In Progress / Blocked / Closed |
-| Next Steps | Planned actions |
-| Customer Impact | Yes / No |
-| Pictures | Optional image attachments (PNG, JPG) |
 
-### 📤 Export
-Generate a formatted report from the current dataset. A toggle lets you export either all topics or only the currently filtered set.
+# Installation
+1. Clone the repository
+Shellgit clone https://github.com/<your-repo>/qa_topics_app.gitcd qa_topics_appWeitere Zeilen anzeigen
+2. Install dependencies
+Shellpip install -r requirements.txtWeitere Zeilen anzeigen
 
-**Excel export** (`.xlsx`) — two sheets:
-- *Summary Dashboard*: KPI table, aging buckets, and category breakdown
-- *Topic Documentation*: Full topic table with color-coded Category and Status columns, frozen header row
+▶️ Running the Application
+Shellstreamlit run app.pyWeitere Zeilen anzeigen
+The application will open automatically in your browser at:
+http://localhost:8501
 
-**PDF export** (`.pdf`, landscape A4):
-- KPI summary table
-- Category breakdown table
-- Full topic detail table with color coding
+⚙️ Configuration
+You can adjust categories, statuses, and features in:
+core/config.py
 
----
+Examples:
 
-## Sidebar Filters
+Enable/disable risk scoring
+Switch from Excel → SQLite
+Adjust aging buckets
+Add new categories
 
-The sidebar is visible on all pages and applies to the **All Topics** view and the **Export** (when "ignore filters" is off):
 
-- **Category** — filter by Elements, Assembly, Cross (multi-select)
-- **Status** — filter by Open, In Progress, Blocked, Closed (multi-select)
-- **Search** — free-text search across Topic Group, Sub-Topic, and Problem Description
+🧠 Risk Scoring Logic
+The risk score is calculated from:
+Severity (1–3)
++ Customer impact (0 or +2)
++ Aging score (0–3)
+= RiskScore (0–8)
 
----
+High-risk topics or topics open >180 days trigger escalation.
 
-## Color Coding
+# Data Model
+Each topic contains canonical fields such as:
+TopicID
+TopicGroup
+SubTopic
+Category
+PIC
+CustomerImpact
+Severity
+ProblemDescription
+RootCauseAnalysis
+CorrectiveActions
+Status
+NextSteps
+OpeningDate
+FirstResponseDate
+RCADoneDate
+CADoneDate
+ClosedDate
+DaysOpen
+AgingBucket
+RiskScore
+EscalationFlag
+Link8D
+LinkMinutes
+LinkFolder
+AttachmentPaths
 
-| Category | Color |
-|---|---|
-| Elements | 🔵 Blue |
-| Assembly | 🟢 Green |
-| Cross | 🟡 Yellow |
 
-| Status | Color |
-|---|---|
-| Open | 🔴 Red |
-| In Progress | 🔵 Blue |
-| Blocked | 🟡 Yellow |
-| Closed | 🟢 Green |
+# Charts & Visualizations
+Included charts:
 
----
+Aging bucket distribution
+Category Pareto
+Root cause Pareto
+Monthly trend
+Agenda candidates
 
-## Troubleshooting
+All charts automatically update based on filters.
 
-**PDF export button not showing**
-Install ReportLab: `pip install reportlab`
+# Exports
+Excel
+Pythonexport_excel(df, "export_topics.xlsx")Weitere Zeilen anzeigen
+CSV
+Pythonexport_csv(df, "export_topics.csv")Weitere Zeilen anzeigen
+PPTX
+Generates slides with:
 
-**App won't start**
-Make sure all packages are installed: `pip install -r requirements.txt`
+Topic ID
+Category
+PIC
+Status
+Problem summary
+RCA summary
+CA summary
+Next steps
+Risk score & aging
 
-**Data not saving between sessions**
-Check that the app has write permission in its folder. The `topics_data.json` file must be writeable.
 
-**Port already in use**
-Run on a different port: `streamlit run topic_database_app.py --server.port 8502`
+# Data Privacy
+No external services are used.
+All data remains local within the data/ folder.
+For corporate use, ensure compliance with internal rules on storage and attachments.

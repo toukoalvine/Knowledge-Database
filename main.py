@@ -179,16 +179,16 @@ def load_data(uploaded=None):
 
 
 # ── Colour helpers ────────────────────────────────────────────────
-#SEV_ORDER  = ["Critical","High","Medium","Low"]
+SEV_ORDER  = ["Critical","High","Medium","Low"]
 STAT_ORDER = ["Open","In Progress","Blocked","Closed"]
 SEV_COLOR  = {"Critical":"#DC2626","High":"#EF4444","Medium":"#F59E0B","Low":"#22C55E"}
 STAT_COLOR = {"Open":"#3B82F6","In Progress":"#F59E0B","Blocked":"#EF4444","Closed":"#22C55E"}
 CAT_COLOR  = {"Elements":"#3B82F6","Assembly":"#22C55E","Cross":"#F59E0B"}
 
-#def sev_badge(v):
-    #m = {"Critical":"critical","High":"high","Medium":"medium","Low":"low"}
-    #cls = m.get(v, "no")
-    #return f'<span class="badge badge-{cls}">{v}</span>'
+def sev_badge(v):
+    m = {"Critical":"critical","High":"high","Medium":"medium","Low":"low"}
+    cls = m.get(v, "no")
+    return f'<span class="badge badge-{cls}">{v}</span>'
 
 def stat_badge(v):
     m = {"Open":"open","In Progress":"progress","Blocked":"blocked","Closed":"closed"}

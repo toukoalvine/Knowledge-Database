@@ -372,7 +372,7 @@ with sort_dir:
     ascending = st.selectbox("Order", ["↑ Ascending","↓ Descending"],
                               label_visibility="collapsed") == "↑ Ascending"
 
-#sev_rank  = {"Critical":0,"High":1,"Medium":2,"Low":3}
+sev_rank  = {"Critical":0,"High":1,"Medium":2,"Low":3}
 stat_rank = {"Blocked":0,"Open":1,"In Progress":2,"Closed":3}
 
 if sort_by == "Status":

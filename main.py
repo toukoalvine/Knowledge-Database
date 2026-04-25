@@ -179,16 +179,16 @@ def load_data(uploaded=None):
 
 
 # ── Colour helpers ────────────────────────────────────────────────
-SEV_ORDER  = ["Critical","High","Medium","Low"]
+#SEV_ORDER  = ["Critical","High","Medium","Low"]
 STAT_ORDER = ["Open","In Progress","Blocked","Closed"]
 SEV_COLOR  = {"Critical":"#DC2626","High":"#EF4444","Medium":"#F59E0B","Low":"#22C55E"}
 STAT_COLOR = {"Open":"#3B82F6","In Progress":"#F59E0B","Blocked":"#EF4444","Closed":"#22C55E"}
 CAT_COLOR  = {"Elements":"#3B82F6","Assembly":"#22C55E","Cross":"#F59E0B"}
 
-def sev_badge(v):
-    m = {"Critical":"critical","High":"high","Medium":"medium","Low":"low"}
-    cls = m.get(v, "no")
-    return f'<span class="badge badge-{cls}">{v}</span>'
+#def sev_badge(v):
+    #m = {"Critical":"critical","High":"high","Medium":"medium","Low":"low"}
+    #cls = m.get(v, "no")
+    #return f'<span class="badge badge-{cls}">{v}</span>'
 
 def stat_badge(v):
     m = {"Open":"open","In Progress":"progress","Blocked":"blocked","Closed":"closed"}
@@ -204,10 +204,10 @@ def esc_badge(v):
 # SIDEBAR
 # ══════════════════════════════════════════════════════════════════
 with st.sidebar:
-    st.markdown("## 🔧 QM Dashboard")
+    st.markdown("##  QM Dashboard")
     st.markdown("---")
 
-    uploaded = st.file_uploader("📂 Upload Excel", type=["xlsx"],
+    uploaded = st.file_uploader("Upload Excel", type=["xlsx"],
                                 help="Upload your Topic Database Excel file")
     st.markdown("---")
     st.markdown("### Filters")
@@ -232,7 +232,7 @@ with st.sidebar:
     sel_days = st.slider("Max. Days Open", 0, max(days_max, 500), max(days_max, 500))
 
     st.markdown("---")
-    st.caption(f"📅 {date.today().strftime('%d %b %Y')}")
+    st.caption(f" {date.today().strftime('%d %b %Y')}")
 
 
 # ── Apply filters ─────────────────────────────────────────────────
@@ -332,31 +332,31 @@ with c2:
                        xaxis=dict(title=""))
     st.plotly_chart(fig3, use_container_width=True)
 
-with c3:
+#with c3:
     # PIC workload — open + in progress + blocked per person
-    active_df = df[df["Status"].isin(["Open","In Progress","Blocked"])]
-    pic_grp = active_df.groupby(["PIC NED","Status"]).size().reset_index(name="n")
-    fig4 = px.bar(pic_grp, x="PIC NED", y="n", color="Status",
-                  color_discrete_map=STAT_COLOR,
-                  category_orders={"Status": ["Open","In Progress","Blocked"]},
-                  text_auto=True,
-                  labels={"n":"Open Topics","PIC NED":""},
-                  title="Active Topics by PIC")
-    fig4.update_layout(plot_bgcolor="white", paper_bgcolor="white",
-                       legend_title="", font_family="Inter",
-                       margin=dict(t=40, b=10, l=10, r=10), height=280,
-                       legend=dict(orientation="h", yanchor="bottom", y=1.02))
-    fig4.update_traces(textfont_size=11)
-    st.plotly_chart(fig4, use_container_width=True)
+    #active_df = df[df["Status"].isin(["Open","In Progress","Blocked"])]
+    #pic_grp = active_df.groupby(["PIC NED","Status"]).size().reset_index(name="n")
+    #fig4 = px.bar(pic_grp, x="PIC NED", y="n", color="Status",
+                  #color_discrete_map=STAT_COLOR,
+                  #category_orders={"Status": ["Open","In Progress","Blocked"]},
+                  #text_auto=True,
+                  #labels={"n":"Open Topics","PIC NED":""},
+                 # title="Active Topics by PIC")
+    #fig4.update_layout(plot_bgcolor="white", paper_bgcolor="white",
+                       #legend_title="", font_family="Inter",
+                      # margin=dict(t=40, b=10, l=10, r=10), height=280,
+                       #legend=dict(orientation="h", yanchor="bottom", y=1.02))
+   # fig4.update_traces(textfont_size=11)
+   # st.plotly_chart(fig4, use_container_width=True)
 
 
 # ══════════════════════════════════════════════════════════════════
 # TOPIC TABLE
 # ══════════════════════════════════════════════════════════════════
-st.markdown('<div class="section-title">📋 Topic Overview</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title">Topic Overview</div>', unsafe_allow_html=True)
 
 # Search bar
-search = st.text_input("🔍 Search topics, PICs, descriptions…", placeholder="Type to filter…", label_visibility="collapsed")
+search = st.text_input("Search topics, PICs, descriptions…", placeholder="Type to filter…", label_visibility="collapsed")
 if search:
     mask = df.apply(lambda r: r.astype(str).str.contains(search, case=False, na=False).any(), axis=1)
     df_show = df[mask]
@@ -372,7 +372,7 @@ with sort_dir:
     ascending = st.selectbox("Order", ["↑ Ascending","↓ Descending"],
                               label_visibility="collapsed") == "↑ Ascending"
 
-sev_rank  = {"Critical":0,"High":1,"Medium":2,"Low":3}
+#sev_rank  = {"Critical":0,"High":1,"Medium":2,"Low":3}
 stat_rank = {"Blocked":0,"Open":1,"In Progress":2,"Closed":3}
 
 if sort_by == "Status":
@@ -417,19 +417,19 @@ for _, row in df_show.iterrows():
         st.markdown("---")
         c1d, c2d = st.columns(2)
         with c1d:
-            st.markdown("**📝 Problem Description**")
+            st.markdown("**Problem Description**")
             st.info(row.get("Problem Description","—") or "—")
-            st.markdown("**🔍 Root Cause Analysis**")
+            st.markdown("**Root Cause Analysis**")
             st.info(row.get("Root Cause Analysis","—") or "—")
         with c2d:
-            st.markdown("**✅ Corrective Actions**")
+            st.markdown("**Corrective Actions**")
             st.success(row.get("Corrective Actions","—") or "—")
-            st.markdown("**▶ Next Steps**")
+            st.markdown("**Next Steps**")
             st.warning(row.get("Next Steps","—") or "—")
 
         prev = row.get("Prevention of recurrence","")
         if prev and str(prev) not in ("nan",""):
-            st.markdown("**🔁 Prevention of Recurrence**")
+            st.markdown("**Prevention of Recurrence**")
             st.markdown(f"> {prev}")
 
 

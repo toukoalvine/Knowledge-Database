@@ -26,7 +26,7 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
 /* Metric cards */
 .kpi-card {
-    background: white;
+    background:gray;
     border-radius: 12px;
     padding: 1.1rem 1.2rem;
     border-left: 5px solid;

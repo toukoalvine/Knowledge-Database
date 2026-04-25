@@ -16,17 +16,182 @@ st.set_page_config(
 # ── Global styles ────────────────────────────────────────────────
 st.markdown("""
 <style>
-/* Inter font */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* Source Sans Pro - NGK Corporate Font */
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&display=swap');
 
-html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
+/* ── Base ── */
+html, body, [class*="css"] {
+    font-family: 'Source Sans 3', sans-serif;
+    background-color: #F5F5F5;
+    color: #1A1A1A;
+}
 
+/* ── Top header bar accent ── */
+header[data-testid="stHeader"] {
+    background-color: #E2001A;
+    border-bottom: 3px solid #B0001A;
+}
+
+/* ── Sidebar ── */
+section[data-testid="stSidebar"] {
+    background-color: #1C1C1C;
+    border-right: 3px solid #E2001A;
+}
+section[data-testid="stSidebar"] * {
+    color: #FFFFFF !important;
+    font-family: 'Source Sans 3', sans-serif;
+}
+section[data-testid="stSidebar"] .stSelectbox label,
+section[data-testid="stSidebar"] .stTextInput label {
+    color: #CCCCCC !important;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ── Page titles / H1 ── */
+h1 {
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 700;
+    font-size: 1.9rem;
+    color: #1C1C1C;
+    border-left: 5px solid #E2001A;
+    padding-left: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+/* ── H2 section headers ── */
+h2 {
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: #333333;
+    border-bottom: 2px solid #E2001A;
+    padding-bottom: 0.3rem;
+    margin-top: 1.5rem;
+}
+
+/* ── H3 ── */
+h3 {
+    font-weight: 600;
+    color: #E2001A;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* ── Metric cards ── */
+div[data-testid="metric-container"] {
+    background-color: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    border-top: 4px solid #E2001A;
+    border-radius: 4px;
+    padding: 1rem 1.2rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+div[data-testid="metric-container"] label {
+    color: #555555 !important;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+}
+div[data-testid="metric-container"] div[data-testid="stMetricValue"] {
+    color: #1C1C1C !important;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+/* ── Primary buttons ── */
+div.stButton > button {
+    background-color: #E2001A;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 3px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.45rem 1.2rem;
+    letter-spacing: 0.03em;
+    transition: background-color 0.2s ease;
+}
+div.stButton > button:hover {
+    background-color: #B0001A;
+    color: #FFFFFF;
+}
+
+/* ── Dataframes / tables ── */
+div[data-testid="stDataFrame"] thead tr th {
+    background-color: #1C1C1C !important;
+    color: #FFFFFF !important;
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+div[data-testid="stDataFrame"] tbody tr:nth-child(even) {
+    background-color: #F9F9F9;
+}
+div[data-testid="stDataFrame"] tbody tr:hover {
+    background-color: #FDECEA;
+}
+
+/* ── Tabs ── */
+div[data-testid="stTabs"] button {
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    color: #555555;
+    border-bottom: 3px solid transparent;
+    font-size: 0.9rem;
+}
+div[data-testid="stTabs"] button[aria-selected="true"] {
+    color: #E2001A;
+    border-bottom: 3px solid #E2001A;
+}
+
+/* ── Info / warning / error boxes ── */
+div[data-testid="stAlert"] {
+    border-radius: 3px;
+    border-left: 5px solid #E2001A;
+    background-color: #FFF5F5;
+}
+
+/* ── Selectbox & inputs ── */
+div[data-testid="stSelectbox"] > div,
+div[data-testid="stTextInput"] > div > input {
+    border-color: #CCCCCC;
+    border-radius: 3px;
+    font-family: 'Source Sans 3', sans-serif;
+}
+div[data-testid="stSelectbox"] > div:focus-within,
+div[data-testid="stTextInput"] > div > input:focus {
+    border-color: #E2001A;
+    box-shadow: 0 0 0 2px rgba(226,0,26,0.15);
+}
+
+/* ── Dividers ── */
+hr {
+    border: none;
+    border-top: 2px solid #E2001A;
+    opacity: 0.3;
+    margin: 1.5rem 0;
+}
+
+/* ── Footer strip ── */
+footer {
+    border-top: 2px solid #E2001A;
+    color: #888888;
+    font-size: 0.75rem;
+    text-align: center;
+    padding-top: 0.5rem;
+}
+</style>
+""", unsafe_allow_html=True)
 /* Main background */
 .main .block-container { padding: 1.5rem 2rem; background: #F8FAFC; }
 
 /* Metric cards */
 .kpi-card {
-    background:gray;
+    background:white;
     border-radius: 12px;
     padding: 1.1rem 1.2rem;
     border-left: 5px solid;

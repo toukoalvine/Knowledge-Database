@@ -14,8 +14,7 @@ st.set_page_config(
 )
 
 # ── Global styles ────────────────────────────────────────────────
-st.markdown("""
-<style>
+st.markdown(""" <style>
 /* Source Sans Pro - NGK Corporate Font */
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&display=swap');
 
@@ -242,8 +241,7 @@ section[data-testid="stSidebar"] .stMultiSelect label { color: #CBD5E1 !importan
 
 /* Scrollable table */
 .table-container { overflow-x: auto; }
-</style>
-""", unsafe_allow_html=True)
+</style>""", unsafe_allow_html=True)
 
 
 # ── Data loading ─────────────────────────────────────────────────

@@ -1,27 +1,3 @@
-"""
-QM Topic Dashboard — Optimized & Refactored
-============================================
-Key improvements over original:
-  1. CSS is separated into a single, deduplicated block (original had two
-     conflicting <style> blocks that caused broken rendering).
-  2. Constants (colours, ordering, badge maps) are grouped in a dedicated
-     CONFIG section — one place to change branding.
-  3. Data-loading logic is isolated in its own module-level function with
-     clear column normalisation steps.
-  4. UI helpers (kpi_card, sev_badge, stat_badge, esc_badge) are pure
-     functions — no side-effects, easy to unit-test.
-  5. Main layout is split into clearly named sections so any developer can
-     find and edit a section without reading the whole file.
-  6. The commented-out PIC chart is restored properly and guarded with an
-     availability check.
-  7. Export buffer is built lazily (only when the download button is
-     clicked) using st.download_button's new `data` callback pattern.
-  8. Magic strings replaced by named constants throughout.
-  9. Type hints added to every helper for IDE support.
- 10. All f-strings with HTML use explicit escaping where needed to prevent
-     XSS-style issues with user-supplied data.
-"""
-
 from __future__ import annotations
 
 import io

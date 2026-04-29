@@ -477,14 +477,20 @@ def render_kpi_row(df: pd.DataFrame, df_raw: pd.DataFrame) -> None:
 # ══════════════════════════════════════════════════════════════════
 # 9. ANALYTICS CHARTS
 # ══════════════════════════════════════════════════════════════════
+
 def _chart_layout(title: str) -> dict:
-    """Shared Plotly layout dict to avoid repetition."""
     return dict(
-        title=title,
-        plot_bgcolor="white", paper_bgcolor="white",
+        title=dict(
+            text=title,
+            pad=dict(b=20)
+        ),
+        plot_bgcolor="white",
+        paper_bgcolor="white",
         font_family="Source Sans 3",
-        margin=dict(t=40, b=10, l=10, r=10),
-        height=280,
+        margin=dict(t=70, b=30, l=50, r=20),
+        height=320,
+        xaxis=dict(title_standoff=15),
+        yaxis=dict(title_standoff=20, automargin=True),
     )
 
 

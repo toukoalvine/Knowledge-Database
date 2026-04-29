@@ -234,7 +234,7 @@ _SAMPLE_ROWS: list[dict] = [
          "Category": "Elements", "Severity": "High", "Opening Date": "2026-02-24",
          "Close Date": None, "PIC NED": "J. Müller", "PIC HQ": "J. Müller", "Status": "Open",
          "Cust. Impact": "Yes", "Days Open": 38, "Aging Bucket": "0–3 Months",
-         "Escalated": "YES", "Problem Description": "Porosity in batch WD-22; ~15% rejection rate.",
+         "Taskforce": "YES", "Problem Description": "Porosity in batch WD-22; ~15% rejection rate.",
          "Root Cause Analysis": "Shielding gas contamination on line 3.",
          "Corrective Actions": "Replaced gas supply line; tightened fittings.",
          "Prevention of recurrence": "Monthly gas-line inspection added to PM schedule.",
@@ -243,7 +243,7 @@ _SAMPLE_ROWS: list[dict] = [
          "Category": "Assembly", "Severity": "Medium", "Opening Date": "2025-11-06",
          "Close Date": "2026-03-06", "PIC NED": "A. Schmidt", "PIC HQ": "A. Schmidt",
          "Status": "Closed", "Cust. Impact": "No", "Days Open": 120,
-         "Aging Bucket": "3–6 Months", "Escalated": "no",
+         "Aging Bucket": "3–6 Months", "Taskforce": "no",
          "Problem Description": "Torque 10% below spec on rear bracket.",
          "Root Cause Analysis": "Calibration drift on station 7.",
          "Corrective Actions": "Wrench recalibrated; audit done.",
@@ -253,7 +253,7 @@ _SAMPLE_ROWS: list[dict] = [
          "Category": "Cross", "Severity": "Critical", "Opening Date": "2025-07-09",
          "Close Date": None, "PIC NED": "L. Bauer", "PIC HQ": "L. Bauer", "Status": "Blocked",
          "Cust. Impact": "Yes", "Days Open": 268, "Aging Bucket": "6–12 Months",
-         "Escalated": "YES", "Problem Description": "OD of X401 exceeds tolerance +0.3 mm.",
+         "Taskforce": "YES", "Problem Description": "OD of X401 exceeds tolerance +0.3 mm.",
          "Root Cause Analysis": "Under investigation – supplier audit planned.",
          "Corrective Actions": "Interim: 100% incoming inspection.",
          "Prevention of recurrence": "Supplier qualification criteria to be tightened.",
@@ -262,7 +262,7 @@ _SAMPLE_ROWS: list[dict] = [
          "Category": "Elements", "Severity": "High", "Opening Date": "2025-02-09",
          "Close Date": None, "PIC NED": "K. Vogel", "PIC HQ": "K. Vogel", "Status": "Open",
          "Cust. Impact": "No", "Days Open": 418, "Aging Bucket": "> 1 Year",
-         "Escalated": "YES", "Problem Description": "Peeling after 48h salt-spray test.",
+         "Taskforce": "YES", "Problem Description": "Peeling after 48h salt-spray test.",
          "Root Cause Analysis": "Pre-treatment bath concentration out of range.",
          "Corrective Actions": "Bath replenished; batch quarantined.",
          "Prevention of recurrence": "Auto-dosing system approved for installation.",
@@ -271,7 +271,7 @@ _SAMPLE_ROWS: list[dict] = [
          "Category": "Elements", "Severity": "Medium", "Opening Date": "2026-01-30",
          "Close Date": None, "PIC NED": "J. Müller", "PIC HQ": "J. Müller",
          "Status": "In Progress", "Cust. Impact": "No", "Days Open": 63,
-         "Aging Bucket": "0–3 Months", "Escalated": "no",
+         "Aging Bucket": "0–3 Months", "Taskforce": "no",
          "Problem Description": "Undercut >0.5 mm on fillet joints zone B.",
          "Root Cause Analysis": "Travel speed too high; welder technique.",
          "Corrective Actions": "Additional welder training completed.",
@@ -281,7 +281,7 @@ _SAMPLE_ROWS: list[dict] = [
          "Category": "Cross", "Severity": "Medium", "Opening Date": "2026-01-15",
          "Close Date": None, "PIC NED": "M. Weber", "PIC HQ": "M. Weber", "Status": "Open",
          "Cust. Impact": "Yes", "Days Open": 78, "Aging Bucket": "0–3 Months",
-         "Escalated": "no", "Problem Description": "Supplier 3-5 days late consistently.",
+         "Taskforce": "no", "Problem Description": "Supplier 3-5 days late consistently.",
          "Root Cause Analysis": "Raw material shortage at supplier.",
          "Corrective Actions": "Dual-sourcing approval in progress.",
          "Prevention of recurrence": "Safety stock level raised to 3 weeks.",
@@ -290,7 +290,7 @@ _SAMPLE_ROWS: list[dict] = [
          "Category": "Assembly", "Severity": "Low", "Opening Date": "2026-03-01",
          "Close Date": None, "PIC NED": "A. Schmidt", "PIC HQ": "A. Schmidt",
          "Status": "In Progress", "Cust. Impact": "No", "Days Open": 33,
-         "Aging Bucket": "0–3 Months", "Escalated": "no",
+         "Aging Bucket": "0–3 Months", "Taskforce": "no",
          "Problem Description": "Bracket deviation 2mm on 8% of parts.",
          "Root Cause Analysis": "Fixture wear on station 4.",
          "Corrective Actions": "Fixture replaced and re-qualified.",
@@ -300,7 +300,7 @@ _SAMPLE_ROWS: list[dict] = [
          "Category": "Elements", "Severity": "Low", "Opening Date": "2025-08-28",
          "Close Date": None, "PIC NED": "K. Vogel", "PIC HQ": "K. Vogel", "Status": "Blocked",
          "Cust. Impact": "No", "Days Open": 218, "Aging Bucket": "6–12 Months",
-         "Escalated": "YES", "Problem Description": "Orange peel on exterior panels.",
+         "Taskforce": "YES", "Problem Description": "Orange peel on exterior panels.",
          "Root Cause Analysis": "Paint viscosity out of spec.",
          "Corrective Actions": "Viscosity adjusted; process frozen.",
          "Prevention of recurrence": "In-line viscosity sensor approved for Q3 install.",
@@ -327,9 +327,12 @@ def load_data(uploaded_file=None) -> pd.DataFrame:
     df = df.dropna(subset=["ID"])
     df["ID"] = df["ID"].astype(int)
 
-    # ── Normalise Escalated to "YES" / "No" ──
-    df["Escalated"] = (
-        df["Escalated"].astype(str).str.strip().str.upper()
+    # ── Normalise Taskforce (formerly "Escalated") to "YES" / "No" ──
+    # Support both old column name ("Escalated") and new name ("Taskforce")
+    if "Escalated" in df.columns and "Taskforce" not in df.columns:
+        df = df.rename(columns={"Escalated": "Taskforce"})
+    df["Taskforce"] = (
+        df["Taskforce"].astype(str).str.strip().str.upper()
         .map(lambda x: "YES" if x == "YES" else "No")
     )
 
@@ -367,7 +370,7 @@ def stat_badge(value: str) -> str:
     return _badge(mapping.get(value, "no"), value)
 
 
-def esc_badge(value: str) -> str:
+def taskforce_badge(value: str) -> str:
     return _badge("yes" if value == "YES" else "no", value)
 
 
@@ -428,7 +431,7 @@ def render_sidebar(df_raw: pd.DataFrame) -> pd.DataFrame:
 
         sel_cat   = st.multiselect("Category",  options=cat_opts,          default=cat_opts)
         sel_stat  = st.multiselect("Status",    options=Config.STAT_ORDER, default=Config.STAT_ORDER)
-        sel_esc   = st.multiselect("Escalated", options=["YES", "No"],     default=["YES", "No"])
+        sel_tf    = st.multiselect("Taskforce", options=["YES", "No"],     default=["YES", "No"])
         sel_pic   = st.multiselect("PIC",       options=pic_opts,          default=pic_opts)
         sel_days  = st.slider("Max. Days Open", 0, days_max, days_max)
 
@@ -439,7 +442,7 @@ def render_sidebar(df_raw: pd.DataFrame) -> pd.DataFrame:
     mask = pd.Series(True, index=df.index)
     if sel_cat:  mask &= df["Category"].isin(sel_cat)
     if sel_stat: mask &= df["Status"].isin(sel_stat)
-    if sel_esc:  mask &= df["Escalated"].isin(sel_esc)
+    if sel_tf:   mask &= df["Taskforce"].isin(sel_tf)
     if sel_pic:  mask &= df["PIC NED"].isin(sel_pic)
     mask &= df["Days Open"] <= sel_days
 
@@ -468,7 +471,7 @@ def render_kpi_row(df: pd.DataFrame, df_raw: pd.DataFrame) -> None:
     kpi(cols[2], "In Progress",   counts.get("In Progress", 0),     "#F59E0B", "active")
     kpi(cols[3], "Blocked",       counts.get("Blocked", 0),         "#EF4444", "needs action")
     kpi(cols[4], "Closed",        counts.get("Closed", 0),          "#22C55E", "resolved")
-    kpi(cols[5], "Escalated",     (df["Escalated"] == "YES").sum(), "#B91C1C", "⚠ mgmt attn")
+    kpi(cols[5], "Taskforce",      (df["Taskforce"] == "YES").sum(), "#B91C1C", "⚠ mgmt attn")
 
 
 # ══════════════════════════════════════════════════════════════════
@@ -486,10 +489,10 @@ def _chart_layout(title: str) -> dict:
 
 
 def render_charts(df: pd.DataFrame) -> None:
-    """Render the three analytics charts."""
+    """Render the two analytics charts."""
     st.markdown('<div class="section-title">📊 Analytics</div>', unsafe_allow_html=True)
 
-    c1, c2, c3 = st.columns([1.3, 1, 1])
+    c1, c2 = st.columns([1.3, 1])
 
     # ── Chart 1: Status × Category stacked bar ──
     with c1:
@@ -524,28 +527,6 @@ def render_charts(df: pd.DataFrame) -> None:
         )
         st.plotly_chart(fig2, use_container_width=True)
 
-    # ── Chart 3: Active topics per PIC ──
-    with c3:
-        active = df[df["Status"].isin(["Open", "In Progress", "Blocked"])]
-        if active.empty:
-            st.info("No active topics to display.")
-        else:
-            pic_grp = active.groupby(["PIC NED", "Status"]).size().reset_index(name="n")
-            fig3 = px.bar(
-                pic_grp, x="PIC NED", y="n", color="Status",
-                color_discrete_map=Config.STAT_COLOR,
-                category_orders={"Status": ["Open", "In Progress", "Blocked"]},
-                text_auto=True,
-                labels={"n": "Open Topics", "PIC NED": ""},
-            )
-            fig3.update_layout(
-                **_chart_layout("Active Topics by PIC"),
-                legend=dict(orientation="h", yanchor="bottom", y=1.02),
-                legend_title="",
-            )
-            fig3.update_traces(textfont_size=11)
-            st.plotly_chart(fig3, use_container_width=True)
-
 
 # ══════════════════════════════════════════════════════════════════
 # 10. TOPIC TABLE
@@ -574,7 +555,7 @@ def _render_topic_row(row: pd.Series) -> None:
         with col_a:
             st.markdown(f"**Category:** {row['Category']}")
             st.markdown(f"**Status:** {stat_badge(row['Status'])}", unsafe_allow_html=True)
-            st.markdown(f"**Escalated:** {esc_badge(row['Escalated'])}", unsafe_allow_html=True)
+            st.markdown(f"**Taskforce:** {taskforce_badge(row['Taskforce'])}", unsafe_allow_html=True)
 
         with col_b:
             st.markdown(f"**PIC NED:** {row['PIC NED']}")
